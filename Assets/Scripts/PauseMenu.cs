@@ -17,18 +17,20 @@ public class PauseMenu : MonoBehaviour
 
         if (resumeText == null)
         {
-            resumeText = transform.Find("Resume Text").gameObject.GetComponent<TextMeshProUGUI>();
+            resumeText = transform.Find("ResumeButton/Resume Text").gameObject.GetComponent<TextMeshProUGUI>();
         }
 
 		if (settingsText == null)
 		{
-			settingsText = transform.Find("Settings Text").gameObject.GetComponent<TextMeshProUGUI>();
+			settingsText = transform.Find("SettingsButton/Settings Text").gameObject.GetComponent<TextMeshProUGUI>();
 		}
 
 		if (exitText == null)
 		{
-			exitText = transform.Find("Exit Text").gameObject.GetComponent<TextMeshProUGUI>();
+			exitText = transform.Find("ExitButton/Exit Text").gameObject.GetComponent<TextMeshProUGUI>();
 		}
+
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
 
 		if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -80,19 +82,25 @@ public class PauseMenu : MonoBehaviour
 
 			if (Input.GetKeyDown(KeyCode.Return))
 			{
-				Time.timeScale = 1.0f;
-				LoadManager.loading = true;
-				LoadManager.sceneToLoad = 0;
-				SceneManager.LoadSceneAsync("LoadingScreen");
+				Exit();
 			}
 		}
-
+#endif
 	}
 
-	private void Resume()
+	public void Resume()
 	{
 		Time.timeScale = 1.0f;
 		PlayerController.pauseMode = false;
+		PlayerControllerInput.pause = false;
 		this.gameObject.SetActive(false);
+	}
+
+	public void Exit()
+	{
+		Time.timeScale = 1.0f;
+		LoadManager.loading = true;
+		LoadManager.sceneToLoad = 0;
+		SceneManager.LoadSceneAsync("LoadingScreen");
 	}
 }

@@ -31,14 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public static float deathFall = -7f;
 
-    private float horizontalInput = 0f;
-
-	public KeyCode jump1 = KeyCode.UpArrow;
-	public KeyCode jump2 = KeyCode.W;
-	public KeyCode shoot = KeyCode.Space;
-	public KeyCode pause = KeyCode.Escape;
-
-
+	private float horizontalPace = 0f;
 
 	void Start()
     {
@@ -55,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-		if (Input.GetKeyDown(pause) && !pauseMode) //Input
+		if (PlayerControllerInput.pause && !pauseMode) //Input
 		{
 			Time.timeScale = 0f;
 			pauseMode = true;
@@ -66,10 +59,10 @@ public class PlayerController : MonoBehaviour
 	void FixedUpdate()
     {
         //Variables
-        horizontalInput = Input.GetAxis("Horizontal") * speed; //INPUT
+        horizontalPace = PlayerControllerInput.horizontalInput * speed; //INPUT
 
 		//Shooting Arrows
-		if (Input.GetKey(shoot) && !arrowShot) //INPUT
+		if (PlayerControllerInput.shoot && !arrowShot) //INPUT
 		{
 			Instantiate(arrow, transform.position, transform.rotation);
 			arrowShot = true;
@@ -82,25 +75,25 @@ public class PlayerController : MonoBehaviour
 				playerRb.AddForce(new Vector2(arrowRecoil, 0f), ForceMode2D.Impulse);
 			}
 		}
-		else if (!Input.GetKey(shoot) && arrowShot) //INPUT
+		else if (!PlayerControllerInput.shoot && arrowShot) //INPUT
 		{
 			arrowShot = false;
 		}
 
 
 		//vertical(Jump)
-		if ((Input.GetKey(jump1) || Input.GetKey(jump2)) && isGrounded && canJump) //INPUT
+		if (PlayerControllerInput.jump && isGrounded && canJump) //INPUT
         {
             playerRb.AddForce(new Vector2(0f, jumpPower), ForceMode2D.Impulse);
-
-            isGrounded = false;
+			PlayerControllerInput.jump = false;
+			isGrounded = false;
 			canJump= false;
 		}
 
         //horizontal
         if (!arrowShot)// && isGrounded)
         {
-            playerRb.velocity = new Vector2(horizontalInput, playerRb.velocity.y);
+            playerRb.velocity = new Vector2(horizontalPace, playerRb.velocity.y);
 
 			if (unpassableFinishLineOnRight && (transform.position.x > endStar.transform.position.x) && isGrounded)
 			{ 
@@ -118,7 +111,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		//Running Animation & Direction
-		if (Mathf.Abs(horizontalInput) > 0)
+		if (Mathf.Abs(horizontalPace) > 0)
 		{
 			playerAnim.SetBool("isRunning", true);
 		}
@@ -127,12 +120,12 @@ public class PlayerController : MonoBehaviour
 			playerAnim.SetBool("isRunning", false);
 		}
 
-		if (horizontalInput < 0 && !arrowShot)
+		if (horizontalPace < 0 && !arrowShot)
 		{
 			isFacingRight = false;
 			transform.localScale = new Vector3(-7.5f, 7.5f, 7.5f);
 		}
-		else if (horizontalInput > 0 && !arrowShot)
+		else if (horizontalPace > 0 && !arrowShot)
 		{
 			isFacingRight = true;
 			transform.localScale = new Vector3(7.5f, 7.5f, 7.5f);
@@ -153,6 +146,9 @@ public class PlayerController : MonoBehaviour
 		{
 			transform.position = new Vector3(-7f, 7f, 0f);
 			playerRb.velocity = new Vector2(0f, 0f);
+
+			isGrounded = false;
+			canJump = false;
 		}
 		if (LoadManager.playerLives < 0)
 		{
@@ -173,6 +169,7 @@ public class PlayerController : MonoBehaviour
 		if (other.gameObject.CompareTag("Jumpable"))
 		{
 			isGrounded = true;
+			PlayerControllerInput.jump = false;
 		}
 
 		if (other.gameObject.CompareTag("Enemy"))

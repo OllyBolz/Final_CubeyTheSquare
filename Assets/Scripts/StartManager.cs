@@ -6,20 +6,20 @@ using TMPro;
 
 public class StartManager : MonoBehaviour
 {
-	private LoadManager loadManager;
 
 	private TextMeshProUGUI pressStart;
 
 	void Start()
 	{
-		loadManager = FindObjectOfType<LoadManager>();
 
-		if (loadManager != null)
-		{
-			Destroy(loadManager.gameObject);
-		}
+		pressStart = GameObject.Find("/Canvas/Background/Press Start").GetComponent<TextMeshProUGUI>();
 
-		pressStart = GameObject.Find("/Canvas/Press Start").GetComponent<TextMeshProUGUI>();
+#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+		pressStart.text = "Press Enter to Start";
+#elif (UNITY_ANDROID || UNITY_IOS) //&& !UNITY_EDITOR
+        pressStart.text = "Tap to Start";
+#endif
+
 		StartCoroutine(FlashPressStart());
 	}
 
@@ -27,8 +27,13 @@ public class StartManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-			SceneManager.LoadScene("LoadingScreen");
+			GameStart();
 		}
+	}
+
+	public void GameStart()
+	{
+		SceneManager.LoadScene("LoadingScreen");
 	}
 
 	IEnumerator FlashPressStart()

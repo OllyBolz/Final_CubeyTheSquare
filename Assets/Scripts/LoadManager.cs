@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class LoadManager : MonoBehaviour
 {
-	public static int playerLives = 3;
+	private int defaultLives = 9;
+	public static int playerLives;
 	public static LoadManager loadManager;
 	public static int numberOfLevels = 3;
     public static int sceneToLoad = 1;
@@ -25,7 +26,9 @@ public class LoadManager : MonoBehaviour
 			loadManager = this;
 			DontDestroyOnLoad(this.gameObject);
 			///Non Singleton Code
+			playerLives = defaultLives;
 			sceneToLoad = 1;
+			loading = true;
 		}
 	}
 
@@ -56,6 +59,11 @@ public class LoadManager : MonoBehaviour
 
 			StartCoroutine(LoadScene());
 			loading = false;	
+		}
+
+		if (SceneManager.GetActiveScene().name == "StartScreen")
+		{
+			Destroy(this.gameObject);
 		}
 	}
 

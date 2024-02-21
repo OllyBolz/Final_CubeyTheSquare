@@ -7,7 +7,7 @@ using TMPro;
 public class LifeController : MonoBehaviour
 {
     private TextMeshProUGUI lifeText;
-	private TextMeshProUGUI gameOverText;
+	private GameObject gameOverText;
 
     void Update()
     {
@@ -22,8 +22,8 @@ public class LifeController : MonoBehaviour
 
         if (gameOverText == null)
         {
-            gameOverText = GameObject.Find("/Canvas/Game Over").GetComponent<TextMeshProUGUI>();
-            gameOverText.gameObject.SetActive(false);
+            gameOverText = GameObject.Find("/Canvas/Game Over");
+            gameOverText.SetActive(false);
         }
 
 		if (LoadManager.playerLives < 0)
@@ -49,7 +49,7 @@ public class LifeController : MonoBehaviour
 
     IEnumerator GameOver() 
     {
-        gameOverText.gameObject.SetActive(true);
+        gameOverText.SetActive(true);
 		lifeText.gameObject.SetActive(false);
 		yield return new WaitForSeconds(4);
 
