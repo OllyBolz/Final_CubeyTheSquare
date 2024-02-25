@@ -83,9 +83,16 @@ public class PlayerControllerInput : MonoBehaviour
     public void JumpButton()
     {
         jump = true;
-    }
+		StartCoroutine(JumpTimeOut());
+	}
 
-    public void LeftButton()
+	public IEnumerator JumpTimeOut()
+	{
+		yield return new WaitForSeconds(0.05f);
+		jump = false;
+	}
+
+	public void LeftButton()
     {
         horizontalInput = -1f;
     }

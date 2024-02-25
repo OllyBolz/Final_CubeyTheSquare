@@ -1,0 +1,7 @@
+Executable : C:\Program Files\Unity\Hub\Editor\2023.2.10f1\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\cmake\3.22.1\bin\ninja.exe
+arguments : 
+-C
+C:\Users\Oliver H. A. Harper\OneDrive\0 - Unity Bootcamp Project\Exercises\Final_CubeyTheSquare\.utmp\Debug\g2k1i1a6\arm64-v8a
+swappywrapper
+jvmArgs : 
+

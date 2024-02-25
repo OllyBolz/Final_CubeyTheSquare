@@ -93,12 +93,16 @@ public class PauseMenu : MonoBehaviour
 		Time.timeScale = 1.0f;
 		PlayerController.pauseMode = false;
 		PlayerControllerInput.pause = false;
+
 		this.gameObject.SetActive(false);
 	}
 
 	public void Exit()
 	{
 		Time.timeScale = 1.0f;
+		PlayerController.pauseMode = false;
+		PlayerControllerInput.pause = false;
+
 		LoadManager.loading = true;
 		LoadManager.sceneToLoad = 0;
 		SceneManager.LoadSceneAsync("LoadingScreen");
